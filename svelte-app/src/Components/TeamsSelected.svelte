@@ -1,74 +1,18 @@
 <script>
   import { Col, Container, Row, Styles } from "sveltestrap";
+  import { teams } from '../store';
 
   export let teamNumber;
 
-  const team = {
-    id: 33,
-    league: 39,
-    season: 2020,
-    name: "Manchester United",
-    logo: "https://media.api-sports.io/football/teams/33.png",
-    statistics: {
-      goals: {
-        for: {
-          total: {
-            home: 40,
-            away: 26,
-            total: 66,
-          },
-          average: {
-            home: "2.1",
-            away: "1.4",
-            total: "1.7",
-          },
-        },
-        against: {
-          total: {
-            home: 17,
-            away: 19,
-            total: 36,
-          },
-          average: {
-            home: "0.9",
-            away: "1.0",
-            total: "0.9",
-          },
-        },
-      },
-      fixtures: {
-        played: {
-          home: 19,
-          away: 19,
-          total: 38,
-        },
-        wins: {
-          home: 10,
-          away: 8,
-          total: 18,
-        },
-        draws: {
-          home: 7,
-          away: 5,
-          total: 12,
-        },
-        loses: {
-          home: 2,
-          away: 6,
-          total: 8,
-        },
-      },
-    },
-  };
 </script>
 
 <div>
   <Container class="contenedor">
     <Row>
       <Col class="columna">
-        <span class="team_name">{team.name}</span>
-        <img class="team_logo" src={team.logo} alt="" />
-        <span class="season">{team.season}</span>
+        <span class="team_name">{$teams[teamNumber - 1].name}</span>
+        <img class="team_logo" src={$teams[teamNumber - 1].logo} alt="" />
+        <span class="season">{$teams[teamNumber - 1].season}</span>
       </Col>
     </Row>
 
@@ -80,39 +24,39 @@
     </Row>
     <Row>
       <Col class="col-5 columna headers_row">Games Played</Col>
-      <Col class="columna">{team.statistics.fixtures.played.home}</Col>
-      <Col class="columna">{team.statistics.fixtures.played.away}</Col>
-      <Col class="columna">{team.statistics.fixtures.played.total}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.played.home}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.played.away}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.played.total}</Col>
     </Row>
     <Row>
       <Col class="col-5 columna headers_row">Wins</Col>
-      <Col class="columna">{team.statistics.fixtures.wins.home}</Col>
-      <Col class="columna">{team.statistics.fixtures.wins.away}</Col>
-      <Col class="columna">{team.statistics.fixtures.wins.total}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.wins.home}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.wins.away}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.wins.total}</Col>
     </Row>
     <Row>
       <Col class="col-5 columna headers_row">Draws</Col>
-      <Col class="columna">{team.statistics.fixtures.draws.home}</Col>
-      <Col class="columna">{team.statistics.fixtures.draws.away}</Col>
-      <Col class="columna">{team.statistics.fixtures.draws.total}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.draws.home}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.draws.away}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.draws.total}</Col>
     </Row>
     <Row>
       <Col class="col-5 columna headers_row">Losses</Col>
-      <Col class="columna">{team.statistics.fixtures.loses.home}</Col>
-      <Col class="columna">{team.statistics.fixtures.loses.away}</Col>
-      <Col class="columna">{team.statistics.fixtures.loses.total}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.loses.home}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.loses.away}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.fixtures.loses.total}</Col>
     </Row>
     <Row>
       <Col class="col-5 columna headers_row">Goals For</Col>
-      <Col class="columna">{team.statistics.goals.for.total.home}</Col>
-      <Col class="columna">{team.statistics.goals.for.total.away}</Col>
-      <Col class="columna">{team.statistics.goals.for.total.total}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.goals.for.total.home}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.goals.for.total.away}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.goals.for.total.total}</Col>
     </Row>
     <Row>
       <Col class="col-5 columna headers_row">Goals Against</Col>
-      <Col class="columna">{team.statistics.goals.against.total.home}</Col>
-      <Col class="columna">{team.statistics.goals.against.total.away}</Col>
-      <Col class="columna">{team.statistics.goals.against.total.total}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.goals.against.total.home}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.goals.against.total.away}</Col>
+      <Col class="columna">{$teams[teamNumber - 1].statistics.goals.against.total.total}</Col>
     </Row>
   </Container>
 </div>

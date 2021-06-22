@@ -1,5 +1,5 @@
 <script>
-  //import Search from './Components/Search.svelte';
+  import Search from './Components/Search.svelte';
   import TeamsComparison from "./Components/TeamsComparison.svelte";
   let name = "world";
 </script>
@@ -12,9 +12,9 @@
   />
   <h1 class="title">Team Comparator Tool</h1>
   <div class="bodyy">
-    <!-- <div>
+    <div>
 			<Search />
-		</div> -->
+		</div>
     <div>
       <TeamsComparison />
     </div>

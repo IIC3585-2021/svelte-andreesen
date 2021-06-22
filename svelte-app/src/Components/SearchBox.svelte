@@ -1,11 +1,11 @@
 <script>
     import { Table, Input, Button, Row, Col, Container } from 'sveltestrap';
     import axios from "axios";
-    import teams from '../store';
+    import { teams } from '../store';
     export let teamNumber;
     let season = "";
     let team = "";
-    let selected = null;
+    let selected;
     let options = [{ value: null, text: "<-- Press button to search teams " }];
    
     async function fetchTeams() {
@@ -25,7 +25,7 @@
           );
           const jsonResponse = await res.data.response;
           let teams = [];
-          teams.push({ value: null, text: "Select a team" });
+          // teams.push({ value: null, text: "Select a team" });
           jsonResponse.forEach((element) => {
             teams.push({
               value: {
@@ -38,7 +38,8 @@
           });
           options = teams;
     };
-    async function teamSelected(){
+    async function teamSelected(e){
+            await e;
             if (selected != null){
                 const res = await axios.get(
             "https://api-football-v1.p.rapidapi.com/v3/teams/statistics",
@@ -57,7 +58,6 @@
           );
           const jsonResponse = await res.data.response;
           
-          console.log(jsonResponse)
           const newTeam = {
               id: selected.id,
               league: 39,
@@ -69,9 +69,10 @@
                   fixtures: jsonResponse.fixtures
               }
           }
+          
           teams.update((teamsArray) => {
               teamsArray[teamNumber] = newTeam;
-              return team
+              return teamsArray
           })
         }
     };
@@ -94,7 +95,7 @@
                     <button class="button" on:click={fetchTeams}>Search</button>
                 </Col>
                 <Col xs="9">
-                    <Input type="select" id="selectExample" bind:value={selected} on:change={teamSelected}>
+                    <Input type="select" id="selectExample" bind:value={selected} on:change={(e) => teamSelected(e)}>
                         {#each options as opt}
                             <option value={opt.value}>{opt.text}</option>
                         {/each}
