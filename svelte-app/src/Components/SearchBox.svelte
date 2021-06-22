@@ -1,28 +1,14 @@
 <script>
+    import { Table, Input, Button, Row, Col, Container } from 'sveltestrap';
     import axios from "axios";
+    import teams from '../store';
     export let teamNumber;
-
-
-    export default {
-      data() {
-        return {
-          season: "",
-          team: "",
-          selected: null,
-          options: [{ value: null, text: "<-- Press button to search teams " }],
-        };
-      },
-      props: {
-        teamNumber: Number,
-      },
-      computed: {
-        seasonValid() {
-          return this.season >= 1850 && this.season <= 2020;
-        },
-      },
-      methods: {
-        async fetchTeams() {
-          console.log(this.season);
+    let season = "";
+    let team = "";
+    let selected = null;
+    let options = [{ value: null, text: "<-- Press button to search teams " }];
+   
+    async function fetchTeams() {
           const res = await axios.get(
             `https://api-football-v1.p.rapidapi.com/v3/teams`,
             {
@@ -33,7 +19,7 @@
               },
               params: {
                 league: 39,
-                season: this.season,
+                season: season,
               },
             }
           );
@@ -50,11 +36,10 @@
               text: element.team.name,
             });
           });
-          this.options = teams;
-        },
-    
-        async teamSelected(){
-            if (this.selected != null){
+          options = teams;
+    };
+    async function teamSelected(){
+            if (selected != null){
                 const res = await axios.get(
             "https://api-football-v1.p.rapidapi.com/v3/teams/statistics",
             {
@@ -65,8 +50,8 @@
               },
               params: {
                 league: 39,
-                season: this.season,
-                team: this.selected.id
+                season: season,
+                team: selected.id
               },
             }
           );
@@ -74,27 +59,54 @@
           
           console.log(jsonResponse)
           const newTeam = {
-              id: this.selected.id,
+              id: selected.id,
               league: 39,
-              season: this.season,
-              name: this.selected.name,
-              logo: this.selected.logo,
+              season: season,
+              name: selected.name,
+              logo: selected.logo,
               statistics: {
                   goals: jsonResponse.goals,
                   fixtures: jsonResponse.fixtures
               }
           }
-          const teamNumber = this.teamNumber;
-          this.$store.commit('changeTeam', {newTeam, teamNumber})
+          teams.update((teamsArray) => {
+              teamsArray[teamNumber] = newTeam;
+              return team
+          })
         }
-            }
-            
-      },
     };
-    </script>
+</script>
 
-<div style="">
-    <h3>Change team {{ teamNumber + 1 }}:</h3>
+
+<div>
+    <h3>Change team { teamNumber + 1 }:</h3>
+            <Row class="row">
+                <Col xs="3">
+                    <label class='select_season' for="input-valid">Season</label>
+                </Col>
+                <Col xs="9">
+                    <Input bind:value={season}/>
+                </Col>
+            </Row>
+            {#if season >= 1850 && season <= 2020}
+            <Row>
+                <Col xs="3">
+                    <button class="button" on:click={fetchTeams}>Search</button>
+                </Col>
+                <Col xs="9">
+                    <Input type="select" id="selectExample" bind:value={selected} on:change={teamSelected}>
+                        {#each options as opt}
+                            <option value={opt.value}>{opt.text}</option>
+                        {/each}
+                    </Input>
+                </Col>
+            </Row>
+            {/if}
+</div>
+
+<!-->
+<div>
+    <h3>Change team { teamNumber + 1 }:</h3>
     <b-row class="my-1">
       <b-col sm="2">
         <label class='select_season' style="padding-top: 8px" for="input-valid">Season</label>
@@ -128,12 +140,13 @@
         ></b-form-select>
       </b-col>
     </b-row>
-  </div>
+</div>
+<-->
 
   <style>
-    .show {
-      display: none !important;
-    }
+      :global(.row){
+          width: 100%
+      }      
     
     h3 {
       color: #E90B52;
@@ -141,6 +154,7 @@
     
     .select_season {
        color: #58FF84;
+       padding-top: 8px
     }
     
     #input-valid{
